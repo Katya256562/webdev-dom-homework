@@ -32,7 +32,7 @@
             commentsList.innerHTML = '';
             comments.forEach((comment, index) => {
                 const commentElement = `
-                    <li class="comment">
+                    <li class="comment" data-index="${index}">
                         <div class="comment-header">
                             <div>${comment.name}</div>
                             <div>${comment.date}</div>
@@ -50,11 +50,12 @@
                 commentsList.innerHTML += commentElement;
             });
             attachLikeHandlers();
+            attachCommentClickHandlers();
         }
 
         function addComment() {
-            const name = nameInput.value.trim();
-            const commentText = commentInput.value.trim();
+            const name = sanitizeInput(nameInput.value.trim());
+            const commentText = sanitizeInput(commentInput.value.trim());
 
             if (name === '' || commentText === '') {
                 alert('Пожалуйста, заполните все поля.');
@@ -93,11 +94,32 @@
         function attachLikeHandlers() {
             const likeButtons = document.querySelectorAll('.like-button');
             likeButtons.forEach(button => {
-                button.addEventListener('click', () => {
+                button.addEventListener('click', (event) => {
+                    event.stopPropagation();
                     const index = button.getAttribute('data-index');
                     toggleLike(index);
                 });
             });
+        }
+
+        function attachCommentClickHandlers() {
+            const commentItems = document.querySelectorAll('.comment');
+            commentItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    const index = item.getAttribute('data-index');
+                    const comment = comments[index];
+                    nameInput.value = comment.name;
+                    commentInput.value = `> ${comment.text}`;
+                });
+            });
+        }
+
+        function sanitizeInput(input) {
+            return input.replaceAll(/&/g, "&amp;")
+                        .replaceAll(/</g, "&lt;")
+                        .replaceAll(/>/g, "&gt;")
+                        .replaceAll(/"/g, "&quot;")
+                        .replaceAll(/'/g, "&#039;");
         }
 
         addButton.addEventListener('click', addComment);
