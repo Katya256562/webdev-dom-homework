@@ -1,0 +1,23 @@
+{
+  "name": "webdev-dom-homework",
+  "version": "1.0.0",
+  "description": "https://glebkaf.github.io/webdev-dom-homework/",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Katya256562/webdev-dom-homework.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Katya256562/webdev-dom-homework/issues"
+  },
+  "homepage": "https://github.com/Katya256562/webdev-dom-homework#readme",
+  "devDependencies": {
+    "prettier": "^3.5.3"
+  }
+}
