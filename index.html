@@ -1,37 +1,46 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
-    <title>Проект "Комменты"</title>
-    <meta charset="utf-8" />
-    <link rel="stylesheet" href="styles.css" />
-</head>
+    <head>
+        <title>Проект "Комменты"</title>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" href="styles.css" />
+    </head>
 
-<body>
-    <div class="container">
-        <ul class="comments"></ul>
-        <div class="add-form">
-            <input type="text" class="add-form-name" placeholder="Введите ваше имя" />
-            <textarea type="textarea" class="add-form-text" placeholder="Введите ваш коментарий" rows="4"></textarea>
-            <div class="add-form-row">
-                <button class="add-form-button">Написать</button>
+    <body>
+        <div class="container">
+            <ul class="comments"></ul>
+            <div class="add-form">
+                <input
+                    type="text"
+                    class="add-form-name"
+                    placeholder="Введите ваше имя"
+                />
+                <textarea
+                    type="textarea"
+                    class="add-form-text"
+                    placeholder="Введите ваш коментарий"
+                    rows="4"
+                ></textarea>
+                <div class="add-form-row">
+                    <button class="add-form-button">Написать</button>
+                </div>
             </div>
         </div>
-    </div>
 
-    <script>
-        "use strict";
+        <script>
+            'use strict'
 
-        const nameInput = document.querySelector('.add-form-name');
-        const commentInput = document.querySelector('.add-form-text');
-        const addButton = document.querySelector('.add-form-button');
-        const commentsList = document.querySelector('.comments');
+            const nameInput = document.querySelector('.add-form-name')
+            const commentInput = document.querySelector('.add-form-text')
+            const addButton = document.querySelector('.add-form-button')
+            // const commentsList = document.querySelector('.comments');
 
-        let comments = [];
+            let comments = []
 
-        function renderComments() {
-            commentsList.innerHTML = '';
-            comments.forEach((comment, index) => {
-                const commentElement = `
+            function renderComments() {
+                commentsList.innerHTML = ''
+                comments.forEach((comment, index) => {
+                    const commentElement = `
                     <li class="comment" data-index="${index}">
                         <div class="comment-header">
                             <div>${comment.name}</div>
@@ -46,84 +55,84 @@
                                 <button class="like-button ${comment.isLiked ? '-active-like' : ''}" data-index="${index}"></button>
                             </div>
                         </div>
-                    </li>`;
-                commentsList.innerHTML += commentElement;
-            });
-            attachLikeHandlers();
-            attachCommentClickHandlers();
-        }
-
-        function addComment() {
-            const name = sanitizeInput(nameInput.value.trim());
-            const commentText = sanitizeInput(commentInput.value.trim());
-
-            if (name === '' || commentText === '') {
-                alert('Пожалуйста, заполните все поля.');
-                return;
+                    </li>`
+                    commentsList.innerHTML += commentElement
+                })
+                attachLikeHandlers()
+                attachCommentClickHandlers()
             }
 
-            const currentDate = new Date();
-            const dateString = currentDate.toLocaleString();
+            function addComment() {
+                const name = sanitizeInput(nameInput.value.trim())
+                const commentText = sanitizeInput(commentInput.value.trim())
 
-            comments.push({
-                name: name,
-                text: commentText,
-                date: dateString,
-                likes: 0,
-                isLiked: false
-            });
+                if (name === '' || commentText === '') {
+                    alert('Пожалуйста, заполните все поля.')
+                    return
+                }
 
-            renderComments();
+                const currentDate = new Date()
+                const dateString = currentDate.toLocaleString()
 
-            nameInput.value = '';
-            commentInput.value = '';
-        }
+                comments.push({
+                    name: name,
+                    text: commentText,
+                    date: dateString,
+                    likes: 0,
+                    isLiked: false,
+                })
 
-        function toggleLike(index) {
-            const comment = comments[index];
-            if (comment.isLiked) {
-                comment.likes -= 1;
-                comment.isLiked = false;
-            } else {
-                comment.likes += 1;
-                comment.isLiked = true;
+                renderComments()
+
+                nameInput.value = ''
+                commentInput.value = ''
             }
-            renderComments();
-        }
 
-        function attachLikeHandlers() {
-            const likeButtons = document.querySelectorAll('.like-button');
-            likeButtons.forEach(button => {
-                button.addEventListener('click', (event) => {
-                    event.stopPropagation();
-                    const index = button.getAttribute('data-index');
-                    toggleLike(index);
-                });
-            });
-        }
+            function toggleLike(index) {
+                const comment = comments[index]
+                if (comment.isLiked) {
+                    comment.likes -= 1
+                    comment.isLiked = false
+                } else {
+                    comment.likes += 1
+                    comment.isLiked = true
+                }
+                renderComments()
+            }
 
-        function attachCommentClickHandlers() {
-            const commentItems = document.querySelectorAll('.comment');
-            commentItems.forEach(item => {
-                item.addEventListener('click', () => {
-                    const index = item.getAttribute('data-index');
-                    const comment = comments[index];
-                    nameInput.value = comment.name;
-                    commentInput.value = `> ${comment.text}`;
-                });
-            });
-        }
+            function attachLikeHandlers() {
+                const likeButtons = document.querySelectorAll('.like-button')
+                likeButtons.forEach((button) => {
+                    button.addEventListener('click', (event) => {
+                        event.stopPropagation()
+                        const index = button.getAttribute('data-index')
+                        toggleLike(index)
+                    })
+                })
+            }
 
-        function sanitizeInput(input) {
-            return input.replaceAll(/&/g, "&amp;")
-                        .replaceAll(/</g, "&lt;")
-                        .replaceAll(/>/g, "&gt;")
-                        .replaceAll(/"/g, "&quot;")
-                        .replaceAll(/'/g, "&#039;");
-        }
+            function attachCommentClickHandlers() {
+                const commentItems = document.querySelectorAll('.comment')
+                commentItems.forEach((item) => {
+                    item.addEventListener('click', () => {
+                        const index = item.getAttribute('data-index')
+                        const comment = comments[index]
+                        nameInput.value = comment.name
+                        commentInput.value = `> ${comment.text}`
+                    })
+                })
+            }
 
-        addButton.addEventListener('click', addComment);
-    </script>
+            function sanitizeInput(input) {
+                return input
+                    .replaceAll(/&/g, '&amp;')
+                    .replaceAll(/</g, '&lt;')
+                    .replaceAll(/>/g, '&gt;')
+                    .replaceAll(/"/g, '&quot;')
+                    .replaceAll(/'/g, '&#039;')
+            }
 
-</body>
+            addButton.addEventListener('click', addComment)
+        </script>
+    </body>
 </html>
